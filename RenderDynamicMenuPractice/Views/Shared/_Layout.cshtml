@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
+
+    @RenderSection("scripts", required: false)
+</head>
+<body>
+    <script type="text/javascript">
+        function BuilderMenu() {
+
+            this.Render = function (element, items) {
+                items.forEach(function (value, index, ar) {
+                    if (value.hasChild) {
+                        element.append('<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">' + value.ItemId + '<span class="caret"/></a><ul id="' + value.ItemId + '" class="dropdown-menu"/></li>');
+                    }
+                    else {
+                        element.append('<li><a href="#">' + value.ItemId + '</a></li>');
+                    }
+                });
+            }
+
+            this.GetItems = function (link) {
+                var items = [];
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: link,
+                    async: false,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null) {
+                            items = data;
+                        }
+                    },
+                    error: function (result) {
+                    }
+                });
+                return items;
+            }
+        }
+
+        $(function () {
+            var builderMenu = new BuilderMenu();
+            builderMenu.Render($('#ulMain'), builderMenu.GetItems("Home/GetMenuItem"));
+            builderMenu.Render($('#item3'), builderMenu.GetItems("Home/GetMenuChildren"));
+            
+        });
+
+
+    </script>
+
+    <nav class="navbar navbar-inverse navbar-static-top ">
+        <div class="container">
+            <div class="pull-left">
+                <a class="navbar-brand" href="#">B2B System</a>
+                <ul class="nav navbar-nav" id="ulMain"></ul>
+            </div>
+        </div>
+    </nav>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+
+</body>
+</html>
