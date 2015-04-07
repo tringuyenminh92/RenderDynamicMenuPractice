@@ -45,7 +45,7 @@ namespace RenderDynamicMenuPractice.Controllers
         public JsonResult GetMenuItem()
         {
             var main1 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item1" };
-            var main2 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item2" };
+            var main2 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item2", hasChild=true };
             var main3 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item3", hasChild = true };
             var main4 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item4" };
             var listMain = new List<Item>() { main1, main2, main3, main4 };
@@ -56,10 +56,10 @@ namespace RenderDynamicMenuPractice.Controllers
         }
         public JsonResult GetMenuChildren()
         {
-            var main1 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item5" };
-            var main2 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item6" };
-            var main3 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item7", hasChild = true };
-            var main4 = new Item { LinkDetails = "#", Level = 1, ParentId = "", ItemId = "item8" };
+            var main1 = new Item { LinkDetails = "#", Level = 2, ParentId = "item3", ItemId = "item5" };
+            var main2 = new Item { LinkDetails = "#", Level = 2, ParentId = "item3", ItemId = "item6", hasChild = true };
+            var main3 = new Item { LinkDetails = "#", Level = 2, ParentId = "item2", ItemId = "item7" };
+            var main4 = new Item { LinkDetails = "#", Level = 2, ParentId = "item3", ItemId = "item8"};
             var listMain = new List<Item>() { main1, main2, main3, main4 };
 
 

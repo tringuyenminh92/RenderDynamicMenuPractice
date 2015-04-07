@@ -14,10 +14,22 @@
 </head>
 <body>
     <script type="text/javascript">
-        function BuilderMenu() {
+        function BuilderMenu(mainElement) {
+           
+            this.Render = function (items) {
 
-            this.Render = function (element, items) {
                 items.forEach(function (value, index, ar) {
+
+                    var element;
+
+                    if (value.ParentId != "") {
+                        var idString = "#" + value.ParentId ;
+                        alert(idString);
+                        element = $(idString);
+                    }
+                    else {
+                        element = mainElement;
+                    }
                     if (value.hasChild) {
                         element.append('<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">' + value.ItemId + '<span class="caret"/></a><ul id="' + value.ItemId + '" class="dropdown-menu"/></li>');
                     }
@@ -34,7 +46,6 @@
                     dataType: "json",
                     url: link,
                     async: false,
-                    dataType: "json",
                     success: function (data) {
                         if (data != null) {
                             items = data;
@@ -48,10 +59,10 @@
         }
 
         $(function () {
-            var builderMenu = new BuilderMenu();
-            builderMenu.Render($('#ulMain'), builderMenu.GetItems("Home/GetMenuItem"));
-            builderMenu.Render($('#item3'), builderMenu.GetItems("Home/GetMenuChildren"));
-            
+            var builderMenu = new BuilderMenu($('#ulMain'));
+            builderMenu.Render(builderMenu.GetItems("Home/GetMenuItem"));
+            builderMenu.Render(builderMenu.GetItems("Home/GetMenuChildren"));
+
         });
 
 
