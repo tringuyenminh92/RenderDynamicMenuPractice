@@ -15,27 +15,30 @@
 <body>
     <script type="text/javascript">
         function BuilderMenu(mainElement) {
-           
+
             this.Render = function (items) {
 
                 items.forEach(function (value, index, ar) {
 
-                    var element;
-
-                    if (value.ParentId != "") {
-                        var idString = "#" + value.ParentId ;
-                        alert(idString);
+                    if (value.ParentId == "") {
+                        if (value.hasChild) {
+                            mainElement.append('<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">' + value.ItemId + '<span class="caret"/></a><ul id="' + value.ItemId + '" class="dropdown-menu"/></li>');
+                        }
+                        else {
+                            mainElement.append('<li><a href="#">' + value.ItemId + '</a></li>');
+                        }
+                    }
+                    else {
+                        var idString = "#" + value.ParentId;
                         element = $(idString);
+                        if (value.hasChild) {
+                            element.append('<li class="dropdown-submenu"><a class="dropdown-toggle" data-toggle="dropdown">' + value.ItemId + '</a><ul id="' + value.ItemId + '" class="dropdown-menu"/></li>');
+                        }
+                        else {
+                            element.append('<li><a href="#">' + value.ItemId + '</a></li>');
+                        }
                     }
-                    else {
-                        element = mainElement;
-                    }
-                    if (value.hasChild) {
-                        element.append('<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">' + value.ItemId + '<span class="caret"/></a><ul id="' + value.ItemId + '" class="dropdown-menu"/></li>');
-                    }
-                    else {
-                        element.append('<li><a href="#">' + value.ItemId + '</a></li>');
-                    }
+
                 });
             }
 
@@ -59,10 +62,15 @@
         }
 
         $(function () {
-            var builderMenu = new BuilderMenu($('#ulMain'));
-            builderMenu.Render(builderMenu.GetItems("Home/GetMenuItem"));
-            builderMenu.Render(builderMenu.GetItems("Home/GetMenuChildren"));
 
+            var builderMenu = new BuilderMenu($('#ulMain'));
+            builderMenu.Render(builderMenu.GetItems("Home/GetMainMenuItem"));
+            //for main menu hover event
+            $('.dropdown').hover(function () {
+                $(this).toggleClass('open');
+            });
+            builderMenu.Render(builderMenu.GetItems("Home/GetMenuChildrenItem"));
+            
         });
 
 
@@ -77,7 +85,6 @@
         </div>
     </nav>
     <div id="body">
-        @RenderSection("featured", required: false)
         <section class="content-wrapper main-content clear-fix">
             @RenderBody()
         </section>
